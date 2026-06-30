@@ -27,7 +27,7 @@ Whenever you change the speed, a brief on-screen alert will show the current spe
 Open your **Terminal** and run the following one-liner command. It will download the installation script to your Desktop and run it automatically.
 
 ```bash
-curl -L -o ~/Desktop/autoscroll.command https://raw.githubusercontent.com/bbaemie1-cloud/mac-autoscroll/main/autoscroll.command && chmod +x ~/Desktop/autoscroll.command && open ~/Desktop/autoscroll.command
+curl -L -o ~/Desktop/autoscroll.command https://raw.githubusercontent.com/bbaemie1-cloud/NIBA-MacAutoscroll/main/autoscroll.command && chmod +x ~/Desktop/autoscroll.command && open ~/Desktop/autoscroll.command
 ```
 
 Alternatively, you can manually download `autoscroll.command` from this repository and double-click it to install.
@@ -69,7 +69,7 @@ macOS 환경에서 Hammerspoon을 이용해 부드러운 자동 스크롤(Autosc
 터미널(Terminal)을 열고 아래 명령어를 복사하여 붙여넣기만 하면, 바탕화면에 설치 파일이 생성되고 자동으로 실행됩니다.
 
 ```bash
-curl -L -o ~/Desktop/autoscroll.command https://raw.githubusercontent.com/bbaemie1-cloud/mac-autoscroll/main/autoscroll.command && chmod +x ~/Desktop/autoscroll.command && open ~/Desktop/autoscroll.command
+curl -L -o ~/Desktop/autoscroll.command https://raw.githubusercontent.com/bbaemie1-cloud/NIBA-MacAutoscroll/main/autoscroll.command && chmod +x ~/Desktop/autoscroll.command && open ~/Desktop/autoscroll.command
 ```
 
 또는 이 저장소에서 `autoscroll.command` 파일을 직접 다운로드 한 뒤, 더블 클릭하여 실행하셔도 됩니다.
