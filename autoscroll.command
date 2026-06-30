@@ -6,8 +6,8 @@ cat << 'INNER_EOF' >> ~/.hammerspoon/init.lua
 
 -- [Autoscroll Configuration]
 local scrollTimer = nil
-local scrollSpeed = 1
-local scrollInterval = 0.25 -- 기획 문서 읽기에 적합한 느리고 편안한 속도
+local scrollSpeed = 3 -- 부드러운 스크롤을 위한 픽셀 이동량
+local scrollInterval = 0.02 -- 50 FPS 수준의 부드러운 갱신 주기
 local interruptTap = nil
 
 local function stopScroll()
@@ -50,7 +50,7 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "s", function()
     else
         -- 스크롤 시작
         scrollTimer = hs.timer.doEvery(scrollInterval, function()
-            local scrollEvent = hs.eventtap.event.newScrollEvent({0, -scrollSpeed}, {}, "line")
+            local scrollEvent = hs.eventtap.event.newScrollEvent({0, -scrollSpeed}, {}, "pixel")
             scrollEvent:setProperty(hs.eventtap.event.properties.eventSourceUserData, 12345)
             scrollEvent:post()
         end)
