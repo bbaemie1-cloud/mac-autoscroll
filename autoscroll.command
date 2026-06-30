@@ -8,15 +8,16 @@ cat << 'INNER_EOF' >> ~/.hammerspoon/init.lua
 -- [Autoscroll Configuration]
 local scrollTimer = nil
 local scrollSpeed = 1
-local scrollInterval = 0.02
+local scrollInterval = 0.05
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "S", function()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "s", function()
     if scrollTimer then
         scrollTimer:stop()
         scrollTimer = nil
     else
         scrollTimer = hs.timer.doEvery(scrollInterval, function()
-            hs.eventtap.scrollWheel({0, -scrollSpeed}, {}, "pixel")
+            -- 크롬에서 작동하도록 "pixel" 대신 "line" 단위 사용
+            hs.eventtap.scrollWheel({0, -scrollSpeed}, {}, "line")
         end)
     end
 end)
