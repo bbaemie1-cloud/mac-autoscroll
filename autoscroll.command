@@ -6,7 +6,7 @@ cat << 'INNER_EOF' >> ~/.hammerspoon/init.lua
 
 -- [Autoscroll Configuration]
 local scrollTimer = nil
-local scrollSpeed = 3 -- 부드러운 스크롤을 위한 픽셀 이동량
+local scrollSpeed = 4 -- 부드러운 스크롤 픽셀량 (기존 0.20초 속도에 맞춤)
 local scrollInterval = 0.02 -- 50 FPS 수준의 부드러운 갱신 주기
 local interruptTap = nil
 
