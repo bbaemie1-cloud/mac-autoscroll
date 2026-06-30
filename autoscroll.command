@@ -1,48 +1,36 @@
 #!/bin/bash
+set -e
 
-echo "🚀 autoscroll 설정을 시작합니다..."
+echo "자동 스크롤 기능 설치를 시작합니다..."
 
+# 1. Hammerspoon 설정 디렉토리 생성
 mkdir -p ~/.hammerspoon
 
-# 덮어쓰기(>) 대신 이어쓰기(>>)를 사용하여 기존 설정을 보호합니다.
-cat << 'INNER_EOF' >> ~/.hammerspoon/init.lua
-
+# 2. init.lua 파일 생성
+cat << 'EOF' > ~/.hammerspoon/init.lua
 -- [Autoscroll Configuration]
 local scrollTimer = nil
 local scrollSpeed = 4 -- 기본 속도 (부드러운 스크롤 픽셀량)
 local scrollInterval = 0.02 -- 50 FPS 수준의 부드러운 갱신 주기
 local interruptTap = nil
 
--- [Menu Bar Interface]
--- 전역 변수로 선언하여 가비지 컬렉터(GC)에 의해 삭제되는 것을 방지합니다.
-speedMenu = hs.menubar.new()
-if speedMenu then
-    speedMenu:setTitle("AutoScroll")
+-- 속도 조절 함수
+local function changeSpeed(delta)
+    scrollSpeed = scrollSpeed + delta
+    if scrollSpeed < 1 then scrollSpeed = 1 end
+    if scrollSpeed > 20 then scrollSpeed = 20 end
+    hs.alert.show("자동 스크롤 속도: " .. scrollSpeed)
 end
 
-function setSpeed(speed)
-    scrollSpeed = speed
-    updateMenu()
-    hs.alert.show("스크롤 속도 변경: " .. speed)
-end
+-- 단축키: 속도 줄이기 (Cmd+Alt+Ctrl+Left)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "left", function()
+    changeSpeed(-1)
+end)
 
-function updateMenu()
-    if not speedMenu then return end
-    speedMenu:setMenu({
-        { title = "자동 스크롤 속도 조절", disabled = true },
-        { title = "-" },
-        { title = "매우 느리게 (1px)", fn = function() setSpeed(1) end, checked = (scrollSpeed == 1) },
-        { title = "느리게 (2px)", fn = function() setSpeed(2) end, checked = (scrollSpeed == 2) },
-        { title = "조금 느리게 (3px)", fn = function() setSpeed(3) end, checked = (scrollSpeed == 3) },
-        { title = "보통 (4px)", fn = function() setSpeed(4) end, checked = (scrollSpeed == 4) },
-        { title = "빠르게 (6px)", fn = function() setSpeed(6) end, checked = (scrollSpeed == 6) },
-        { title = "매우 빠르게 (8px)", fn = function() setSpeed(8) end, checked = (scrollSpeed == 8) },
-        { title = "-" },
-        { title = "현재 속도: " .. scrollSpeed .. "px / 0.02초", disabled = true }
-    })
-end
-
-updateMenu()
+-- 단축키: 속도 늘리기 (Cmd+Alt+Ctrl+Right)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "right", function()
+    changeSpeed(1)
+end)
 
 local function stopScroll()
     if scrollTimer then
@@ -65,19 +53,23 @@ interruptTap = hs.eventtap.new({
         return false
     end
     
-    -- 시작/정지 단축키(Cmd+Alt+Ctrl+Down) 입력은 중단 이벤트에서 제외 (단축키에 온전히 맡김)
+    -- 시작/정지/속도조절 단축키 입력은 중단 이벤트에서 제외
     if ev:getType() == hs.eventtap.event.types.keyDown then
         local flags = ev:getFlags()
-        if ev:getKeyCode() == hs.keycodes.map["down"] and flags.cmd and flags.alt and flags.ctrl then
-            return false
+        local keyCode = ev:getKeyCode()
+        if flags.cmd and flags.alt and flags.ctrl then
+            if keyCode == hs.keycodes.map["down"] or keyCode == hs.keycodes.map["left"] or keyCode == hs.keycodes.map["right"] then
+                return false
+            end
         end
     end
     
-    -- 그 외 사용자의 키보드/마우스 입력이 감지되면 스크롤 즉시 정지
+    -- 그 외 사용자의 입력이 감지되면 스크롤 즉시 정지
     stopScroll()
     return false
 end)
 
+-- 단축키: 스크롤 시작/정지 (Cmd+Alt+Ctrl+Down)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "down", function()
     if scrollTimer then
         stopScroll()
@@ -91,31 +83,18 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "down", function()
         interruptTap:start()
     end
 end)
-INNER_EOF
+EOF
 
-# Homebrew가 설치되어 있는지 확인
-if command -v brew >/dev/null 2>&1; then
-    echo "Homebrew가 감지되었습니다. brew를 통해 Hammerspoon을 설치/업데이트합니다..."
-    brew install --cask hammerspoon
-else
-    # Homebrew가 없으면 직접 다운로드 (권한 문제가 적은 ~/Applications 폴더 사용)
-    echo "Homebrew가 없습니다. 수동으로 다운로드합니다..."
-    mkdir -p ~/Applications
-    curl -L https://github.com/Hammerspoon/hammerspoon/releases/latest/download/Hammerspoon.zip -o /tmp/Hammerspoon.zip
-    echo "압축을 풀고 응용 프로그램 폴더(~/Applications)로 이동합니다..."
-    unzip -qo /tmp/Hammerspoon.zip -d ~/Applications/
-    rm /tmp/Hammerspoon.zip
-fi
+echo "스크립트가 성공적으로 저장되었습니다."
 
-echo "Hammerspoon 설정(LaunchAgent)을 등록하여 부팅 시 자동 실행되도록 합니다..."
-mkdir -p ~/Library/LaunchAgents
-cat << 'PLIST_EOF' > ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist
+# 3. 백그라운드 서비스(LaunchAgent) 설정
+cat << 'EOF' > ~/Library/LaunchAgents/org.hammerspoon.autostart.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>org.hammerspoon.Hammerspoon</string>
+    <string>org.hammerspoon.autostart</string>
     <key>ProgramArguments</key>
     <array>
         <string>/usr/bin/open</string>
@@ -124,19 +103,23 @@ cat << 'PLIST_EOF' > ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist
     </array>
     <key>RunAtLoad</key>
     <true/>
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
 </dict>
 </plist>
-PLIST_EOF
+EOF
 
-launchctl load ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist 2>/dev/null || true
+echo "백그라운드 서비스가 등록되었습니다."
 
-echo "Hammerspoon을 실행합니다..."
-# 기존 프로세스 종료 후 재실행 시도
-killall Hammerspoon 2>/dev/null || true
-sleep 1
+# LaunchAgent 적용 및 Hammerspoon 실행
+launchctl load ~/Library/LaunchAgents/org.hammerspoon.autostart.plist 2>/dev/null || true
 open -a Hammerspoon
 
-echo "✅ 모든 설정이 완료되었습니다!"
-echo "상단 메뉴 막대(Menubar)에 스크롤 아이콘(⬇️)이 추가되었습니다. 여기서 속도를 변경할 수 있습니다."
-echo "단축키: Cmd + Alt + Ctrl + 아래 화살표"
-echo "이제 사용해보세요!"
+echo "==================================================="
+echo "설치가 완료되었습니다!"
+echo "단축키 Cmd+Alt+Ctrl+화살표아래(Down)를 누르면 자동 스크롤이 시작됩니다."
+echo "단축키 Cmd+Alt+Ctrl+화살표왼쪽(Left)/오른쪽(Right)을 눌러 속도를 조절하세요!"
+echo "==================================================="
