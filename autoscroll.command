@@ -89,8 +89,7 @@ echo "스크립트가 성공적으로 저장되었습니다."
 
 if [ ! -d "/Applications/Hammerspoon.app" ]; then
     echo "스크롤 엔진(Hammerspoon)을 다운로드합니다..."
-    DOWNLOAD_URL=$(curl -s https://api.github.com/repos/Hammerspoon/hammerspoon/releases/latest | grep "browser_download_url" | grep ".zip" | head -n 1 | cut -d '"' -f 4)
-    curl -L "$DOWNLOAD_URL" -o /tmp/Hammerspoon.zip
+    curl -L "https://github.com/Hammerspoon/hammerspoon/releases/download/1.1.1/Hammerspoon-1.1.1.zip" -o /tmp/Hammerspoon.zip
     echo "압축을 풀고 응용 프로그램 폴더로 이동합니다..."
     unzip -q /tmp/Hammerspoon.zip -d /Applications/
     rm /tmp/Hammerspoon.zip
