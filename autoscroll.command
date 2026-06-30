@@ -1,14 +1,47 @@
 #!/bin/bash
+
 echo "🚀 autoscroll 설정을 시작합니다..."
+
 mkdir -p ~/.hammerspoon
 
+# 덮어쓰기(>) 대신 이어쓰기(>>)를 사용하여 기존 설정을 보호합니다.
 cat << 'INNER_EOF' >> ~/.hammerspoon/init.lua
 
 -- [Autoscroll Configuration]
 local scrollTimer = nil
-local scrollSpeed = 4 -- 부드러운 스크롤 픽셀량 (기존 0.20초 속도에 맞춤)
+local scrollSpeed = 4 -- 기본 속도 (부드러운 스크롤 픽셀량)
 local scrollInterval = 0.02 -- 50 FPS 수준의 부드러운 갱신 주기
 local interruptTap = nil
+
+-- [Menu Bar Interface]
+local speedMenu = hs.menubar.new()
+if speedMenu then
+    speedMenu:setTitle("⬇️ 스크롤")
+end
+
+function setSpeed(speed)
+    scrollSpeed = speed
+    updateMenu()
+    hs.alert.show("스크롤 속도 변경: " .. speed)
+end
+
+function updateMenu()
+    if not speedMenu then return end
+    speedMenu:setMenu({
+        { title = "자동 스크롤 속도 조절", disabled = true },
+        { title = "-" },
+        { title = "매우 느리게 (1px)", fn = function() setSpeed(1) end, checked = (scrollSpeed == 1) },
+        { title = "느리게 (2px)", fn = function() setSpeed(2) end, checked = (scrollSpeed == 2) },
+        { title = "조금 느리게 (3px)", fn = function() setSpeed(3) end, checked = (scrollSpeed == 3) },
+        { title = "보통 (4px)", fn = function() setSpeed(4) end, checked = (scrollSpeed == 4) },
+        { title = "빠르게 (6px)", fn = function() setSpeed(6) end, checked = (scrollSpeed == 6) },
+        { title = "매우 빠르게 (8px)", fn = function() setSpeed(8) end, checked = (scrollSpeed == 8) },
+        { title = "-" },
+        { title = "현재 속도: " .. scrollSpeed .. "px / 0.02초", disabled = true }
+    })
+end
+
+updateMenu()
 
 local function stopScroll()
     if scrollTimer then
@@ -59,23 +92,21 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "down", function()
 end)
 INNER_EOF
 
-if [ ! -d "/Applications/Hammerspoon.app" ] && [ ! -d "$HOME/Applications/Hammerspoon.app" ]; then
-    echo "스크롤 엔진(Hammerspoon)을 설치합니다..."
-    if command -v brew &> /dev/null; then
-        echo "Homebrew가 감지되어 안전하게 설치를 진행합니다..."
-        brew install --cask hammerspoon
-    else
-        echo "직접 다운로드하여 설치합니다 (권한 오류 방지)..."
-        curl -L https://github.com/Hammerspoon/hammerspoon/releases/latest/download/Hammerspoon.zip -o /tmp/Hammerspoon.zip
-        mkdir -p ~/Applications
-        unzip -q /tmp/Hammerspoon.zip -d ~/Applications/
-        rm /tmp/Hammerspoon.zip
-    fi
+# Homebrew가 설치되어 있는지 확인
+if command -v brew >/dev/null 2>&1; then
+    echo "Homebrew가 감지되었습니다. brew를 통해 Hammerspoon을 설치/업데이트합니다..."
+    brew install --cask hammerspoon
 else
-    echo "스크롤 엔진이 이미 설치되어 있습니다."
+    # Homebrew가 없으면 직접 다운로드 (권한 문제가 적은 ~/Applications 폴더 사용)
+    echo "Homebrew가 없습니다. 수동으로 다운로드합니다..."
+    mkdir -p ~/Applications
+    curl -L https://github.com/Hammerspoon/hammerspoon/releases/latest/download/Hammerspoon.zip -o /tmp/Hammerspoon.zip
+    echo "압축을 풀고 응용 프로그램 폴더(~/Applications)로 이동합니다..."
+    unzip -qo /tmp/Hammerspoon.zip -d ~/Applications/
+    rm /tmp/Hammerspoon.zip
 fi
 
-echo "자동 실행(LaunchAgent) 설정을 추가합니다..."
+echo "Hammerspoon 설정(LaunchAgent)을 등록하여 부팅 시 자동 실행되도록 합니다..."
 mkdir -p ~/Library/LaunchAgents
 cat << 'PLIST_EOF' > ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist
 <?xml version="1.0" encoding="UTF-8"?>
@@ -95,12 +126,16 @@ cat << 'PLIST_EOF' > ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist
 </dict>
 </plist>
 PLIST_EOF
+
 launchctl load ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist 2>/dev/null || true
 
-echo "프로그램을 실행합니다."
+echo "Hammerspoon을 실행합니다..."
+# 기존 프로세스 종료 후 재실행 시도
+killall Hammerspoon 2>/dev/null || true
+sleep 1
 open -a Hammerspoon
-echo "================================================="
-echo "✅ 설치 및 설정이 완료되었습니다!"
-echo "⚠️ [중요] 화면에 '손쉬운 사용' 권한 요청 팝업이 뜹니다."
-echo "시스템 설정을 열고 Hammerspoon 스위치를 직접 켜주셔야 작동합니다."
-echo "================================================="
+
+echo "✅ 모든 설정이 완료되었습니다!"
+echo "상단 메뉴 막대(Menubar)에 스크롤 아이콘(⬇️)이 추가되었습니다. 여기서 속도를 변경할 수 있습니다."
+echo "단축키: Cmd + Alt + Ctrl + 아래 화살표"
+echo "이제 사용해보세요!"
