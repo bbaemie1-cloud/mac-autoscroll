@@ -14,15 +14,15 @@ local scrollSpeed = 2 -- 기본 속도 (부드러운 스크롤 픽셀량)
 local scrollInterval = 0.01 -- 100 FPS 수준의 부드러운 갱신 주기
 local interruptTap = nil
 
--- 알림 메시지(인터페이스) 투명도 및 스타일 설정
+-- 알림 메시지(인터페이스) 색상 및 스타일 설정 (미드나잇 블루 & 민트 테마)
 local alertStyle = {
-    fillColor = { white = 0, alpha = 0.3 }, -- 배경 투명도 (0.0 투명 ~ 1.0 불투명)
-    strokeColor = { white = 1, alpha = 0.2 }, -- 테두리 투명도
-    textColor = { white = 1, alpha = 0.9 }, -- 글씨 투명도
+    fillColor = { red = 0.05, green = 0.1, blue = 0.2, alpha = 0.7 }, -- 약간 투명한 미드나잇 블루 배경
+    strokeColor = { red = 0.1, green = 0.8, blue = 0.7, alpha = 0.5 }, -- 민트색 테두리
+    textColor = { red = 0.2, green = 1.0, blue = 0.8, alpha = 1.0 }, -- 쨍한 민트색 글씨
     radius = 15,
     textSize = 27,
-    fadeInDuration = 0.1, -- 나타나는 애니메이션 속도
-    fadeOutDuration = 0.1 -- 사라지는 애니메이션 속도
+    fadeInDuration = 0.1,
+    fadeOutDuration = 0.1
 }
 
 -- 속도 조절 함수
