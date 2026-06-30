@@ -14,9 +14,10 @@ local scrollInterval = 0.02 -- 50 FPS 수준의 부드러운 갱신 주기
 local interruptTap = nil
 
 -- [Menu Bar Interface]
-local speedMenu = hs.menubar.new()
+-- 전역 변수로 선언하여 가비지 컬렉터(GC)에 의해 삭제되는 것을 방지합니다.
+speedMenu = hs.menubar.new()
 if speedMenu then
-    speedMenu:setTitle("⬇️ 스크롤")
+    speedMenu:setTitle("AutoScroll")
 end
 
 function setSpeed(speed)
