@@ -38,6 +38,12 @@ Alternatively, you can manually download `autoscroll.command` from this reposito
 * This permission is strictly required to inject scroll events and detect user input for the auto-stop feature.
 * Please go to `System Settings > Privacy & Security > Accessibility` and **toggle ON** `Hammerspoon` for the tool to work correctly.
 
+### 🛑 Troubleshooting: "Apple cannot check it for malicious software"
+If you downloaded the file manually (Method 2) and see a warning that the file cannot be opened because Apple cannot verify it:
+1. **Right-click** (or `Control` + Click) the `autoscroll.command` file.
+2. Select **Open** from the context menu.
+3. A similar warning will appear, but this time there will be an **"Open"** button. Click it to run the script.
+
 ---
 
 ## 한국어
@@ -73,3 +79,9 @@ curl -L -o ~/Desktop/autoscroll.command https://raw.githubusercontent.com/bbaemi
 * 최초 실행 시 **'손쉬운 사용' 권한 요청 팝업**이 나타납니다.
 * 스크롤 이벤트와 키보드 입력을 감지하기 위해 꼭 필요한 권한입니다.
 * `시스템 설정 > 개인정보 보호 및 보안 > 손쉬운 사용`으로 이동하여 `Hammerspoon` 스위치를 **직접 켜주셔야** 단축키와 자동 정지 기능이 정상적으로 작동합니다.
+
+### 🛑 문제 해결: "악성 코드가 없는지 확인할 수 없습니다" 팝업이 뜰 때
+직접 파일을 다운로드하여 실행할 경우(방법 2), macOS의 보안 정책(Gatekeeper) 때문에 위와 같은 경고가 나타날 수 있습니다. 이럴 때는 다음 방법으로 해결하세요:
+1. `autoscroll.command` 파일을 그냥 더블클릭하지 말고, **마우스 우클릭** (또는 `Control` 키를 누른 채로 클릭) 합니다.
+2. 나타나는 메뉴에서 **[열기]** 를 선택합니다.
+3. 동일한 경고창이 뜨지만 이번에는 **[열기]** 버튼이 활성화되어 있습니다. 열기를 누르시면 정상적으로 설치가 시작됩니다.
