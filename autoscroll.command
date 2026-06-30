@@ -23,12 +23,18 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "s", function()
 end)
 INNER_EOF
 
-if [ ! -d "/Applications/Hammerspoon.app" ]; then
-    echo "스크롤 엔진(Hammerspoon)을 다운로드합니다..."
-    curl -L https://github.com/Hammerspoon/hammerspoon/releases/latest/download/Hammerspoon.zip -o /tmp/Hammerspoon.zip
-    echo "압축을 풀고 응용 프로그램 폴더로 이동합니다..."
-    unzip -q /tmp/Hammerspoon.zip -d /Applications/
-    rm /tmp/Hammerspoon.zip
+if [ ! -d "/Applications/Hammerspoon.app" ] && [ ! -d "$HOME/Applications/Hammerspoon.app" ]; then
+    echo "스크롤 엔진(Hammerspoon)을 설치합니다..."
+    if command -v brew &> /dev/null; then
+        echo "Homebrew가 감지되어 안전하게 설치를 진행합니다..."
+        brew install --cask hammerspoon
+    else
+        echo "직접 다운로드하여 설치합니다 (권한 오류 방지)..."
+        curl -L https://github.com/Hammerspoon/hammerspoon/releases/latest/download/Hammerspoon.zip -o /tmp/Hammerspoon.zip
+        mkdir -p ~/Applications
+        unzip -q /tmp/Hammerspoon.zip -d ~/Applications/
+        rm /tmp/Hammerspoon.zip
+    fi
 else
     echo "스크롤 엔진이 이미 설치되어 있습니다."
 fi
@@ -44,7 +50,9 @@ cat << 'PLIST_EOF' > ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist
     <string>org.hammerspoon.Hammerspoon</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Applications/Hammerspoon.app/Contents/MacOS/Hammerspoon</string>
+        <string>/usr/bin/open</string>
+        <string>-a</string>
+        <string>Hammerspoon</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
