@@ -87,6 +87,16 @@ EOF
 
 echo "스크립트가 성공적으로 저장되었습니다."
 
+if [ ! -d "/Applications/Hammerspoon.app" ]; then
+    echo "스크롤 엔진(Hammerspoon)을 다운로드합니다..."
+    curl -L https://github.com/Hammerspoon/hammerspoon/releases/latest/download/Hammerspoon.zip -o /tmp/Hammerspoon.zip
+    echo "압축을 풀고 응용 프로그램 폴더로 이동합니다..."
+    unzip -q /tmp/Hammerspoon.zip -d /Applications/
+    rm /tmp/Hammerspoon.zip
+else
+    echo "스크롤 엔진이 이미 설치되어 있습니다."
+fi
+
 # 3. 백그라운드 서비스(LaunchAgent) 설정
 cat << 'EOF' > ~/Library/LaunchAgents/org.hammerspoon.autostart.plist
 <?xml version="1.0" encoding="UTF-8"?>
