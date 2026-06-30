@@ -2,23 +2,59 @@
 echo "🚀 autoscroll 설정을 시작합니다..."
 mkdir -p ~/.hammerspoon
 
-# 덮어쓰기(>) 대신 이어쓰기(>>)를 사용하여 기존 설정을 보호합니다.
 cat << 'INNER_EOF' >> ~/.hammerspoon/init.lua
 
 -- [Autoscroll Configuration]
 local scrollTimer = nil
 local scrollSpeed = 1
 local scrollInterval = 0.05
+local interruptTap = nil
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "s", function()
+local function stopScroll()
     if scrollTimer then
         scrollTimer:stop()
         scrollTimer = nil
+    end
+    if interruptTap then
+        interruptTap:stop()
+    end
+end
+
+interruptTap = hs.eventtap.new({
+    hs.eventtap.event.types.keyDown,
+    hs.eventtap.event.types.leftMouseDown,
+    hs.eventtap.event.types.rightMouseDown,
+    hs.eventtap.event.types.scrollWheel
+}, function(ev)
+    -- 우리가 발생시킨 가상 스크롤 이벤트는 무시
+    if ev:getProperty(hs.eventtap.event.properties.eventSourceUserData) == 12345 then
+        return false
+    end
+    
+    -- 시작/정지 단축키(Cmd+Alt+Ctrl+S) 입력은 중단 이벤트에서 제외 (단축키에 온전히 맡김)
+    if ev:getType() == hs.eventtap.event.types.keyDown then
+        local flags = ev:getFlags()
+        if ev:getKeyCode() == hs.keycodes.map["s"] and flags.cmd and flags.alt and flags.ctrl then
+            return false
+        end
+    end
+    
+    -- 그 외 사용자의 키보드/마우스 입력이 감지되면 스크롤 즉시 정지
+    stopScroll()
+    return false
+end)
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "s", function()
+    if scrollTimer then
+        stopScroll()
     else
+        -- 스크롤 시작
         scrollTimer = hs.timer.doEvery(scrollInterval, function()
-            -- 크롬에서 작동하도록 "pixel" 대신 "line" 단위 사용
-            hs.eventtap.scrollWheel({0, -scrollSpeed}, {}, "line")
+            local scrollEvent = hs.eventtap.event.newScrollEvent({0, -scrollSpeed}, {}, "line")
+            scrollEvent:setProperty(hs.eventtap.event.properties.eventSourceUserData, 12345)
+            scrollEvent:post()
         end)
+        interruptTap:start()
     end
 end)
 INNER_EOF
