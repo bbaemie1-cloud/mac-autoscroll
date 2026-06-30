@@ -31,10 +31,10 @@ interruptTap = hs.eventtap.new({
         return false
     end
     
-    -- 시작/정지 단축키(Cmd+Alt+Ctrl+S) 입력은 중단 이벤트에서 제외 (단축키에 온전히 맡김)
+    -- 시작/정지 단축키(Cmd+Alt+Ctrl+Down) 입력은 중단 이벤트에서 제외 (단축키에 온전히 맡김)
     if ev:getType() == hs.eventtap.event.types.keyDown then
         local flags = ev:getFlags()
-        if ev:getKeyCode() == hs.keycodes.map["s"] and flags.cmd and flags.alt and flags.ctrl then
+        if ev:getKeyCode() == hs.keycodes.map["down"] and flags.cmd and flags.alt and flags.ctrl then
             return false
         end
     end
@@ -44,7 +44,7 @@ interruptTap = hs.eventtap.new({
     return false
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "s", function()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "down", function()
     if scrollTimer then
         stopScroll()
     else
