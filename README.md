@@ -6,9 +6,10 @@
 
 ## English
 
-An automated script that sets up smooth, hands-free autoscrolling on macOS using Hammerspoon. It is extremely useful for reading web pages or long documents without manually scrolling.
+An automated script that sets up smooth, hands-free autoscrolling on macOS using Hammerspoon. It is extremely useful for reading web pages, long documents, or code. **It works universally across all macOS applications** (Web browsers, IDEs, PDF readers, etc.) since it simulates standard system scrolling events.
 
 ### ✨ Key Features
+* **Universal Compatibility**: Works in Google Chrome, Safari, VS Code, Notion, Preview, and any other application that supports scrolling.
 * **Smooth Scrolling**: Enjoy 50 FPS (0.02s interval) pixel-perfect smooth scrolling for comfortable reading.
 * **Hotkey Controls**: Start/stop the autoscroll or adjust the speed effortlessly using just your keyboard. No need to click any menus.
 * **Auto-Stop Safety Feature**: The scroll stops instantly and automatically as soon as you touch your keyboard, mouse, or trackpad.
@@ -41,9 +42,10 @@ Alternatively, you can manually download `autoscroll.command` from this reposito
 
 ## 한국어
 
-macOS 환경에서 Hammerspoon을 이용해 부드러운 자동 스크롤(Autoscroll) 기능을 설정해 주는 설치 스크립트입니다. 웹 브라우저나 문서 등에서 텍스트를 읽을 때 매우 유용합니다.
+macOS 환경에서 Hammerspoon을 이용해 부드러운 자동 스크롤(Autoscroll) 기능을 설정해 주는 설치 스크립트입니다. 시스템 표준 스크롤 이벤트를 시뮬레이션하기 때문에 **웹 브라우저뿐만 아니라 macOS의 모든 응용 프로그램에서 완벽하게 동작합니다.** (크롬, 사파리, 노션, VS Code, PDF 뷰어 등)
 
 ### ✨ 주요 기능
+* **모든 앱 호환**: 특정 앱에 종속되지 않고 스크롤이 가능한 모든 프로그램에서 동일하게 사용할 수 있습니다.
 * **부드러운 스크롤**: 50 FPS 수준(0.02초 간격)의 픽셀 단위 스크롤로 눈이 편안하게 문서를 읽을 수 있습니다.
 * **단축키 기반 조작**: 마우스를 만질 필요 없이 키보드 단축키로 스크롤을 켜고 끄거나 속도를 쉽게 조절할 수 있습니다.
 * **자동 정지 (안전 장치)**: 스크롤 도중 사용자가 키보드를 누르거나, 마우스를 클릭하거나, 트랙패드를 조작하면 **자동으로 스크롤이 즉시 멈춥니다**.
