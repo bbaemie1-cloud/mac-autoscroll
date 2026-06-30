@@ -33,6 +33,26 @@ else
     echo "스크롤 엔진이 이미 설치되어 있습니다."
 fi
 
+echo "자동 실행(LaunchAgent) 설정을 추가합니다..."
+mkdir -p ~/Library/LaunchAgents
+cat << 'PLIST_EOF' > ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.hammerspoon.Hammerspoon</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Applications/Hammerspoon.app/Contents/MacOS/Hammerspoon</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>
+PLIST_EOF
+launchctl load ~/Library/LaunchAgents/org.hammerspoon.Hammerspoon.plist 2>/dev/null || true
+
 echo "프로그램을 실행합니다."
 open -a Hammerspoon
 echo "================================================="
