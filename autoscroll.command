@@ -26,17 +26,20 @@ local alertStyle = {
 }
 
 -- 속도 조절 함수
-local alertUuid = nil
+local alertTimer = nil
 local function changeSpeed(delta)
     scrollSpeed = scrollSpeed + delta
     if scrollSpeed < 1 then scrollSpeed = 1 end
     if scrollSpeed > 30 then scrollSpeed = 30 end
     
-    if alertUuid then
-        hs.alert.closeSpecific(alertUuid)
-    end
+    hs.alert.closeAll(0.0) -- 이전 알림 즉시 삭제
+    hs.alert.show("자동 스크롤 속도: " .. scrollSpeed, alertStyle)
     
-    alertUuid = hs.alert.show("자동 스크롤 속도: " .. scrollSpeed, alertStyle, 0.5)
+    -- 엔진 버그 우회: 강제로 0.4초 뒤에 알림 메시지를 삭제하는 타이머 생성
+    if alertTimer then alertTimer:stop() end
+    alertTimer = hs.timer.doAfter(0.4, function()
+        hs.alert.closeAll(0.1)
+    end)
 end
 
 -- 단축키: 속도 줄이기 (Cmd+Alt+Ctrl+Left)
