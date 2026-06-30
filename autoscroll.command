@@ -20,7 +20,9 @@ local alertStyle = {
     strokeColor = { white = 1, alpha = 0.2 }, -- 테두리 투명도
     textColor = { white = 1, alpha = 0.9 }, -- 글씨 투명도
     radius = 15,
-    textSize = 27
+    textSize = 27,
+    fadeInDuration = 0.1, -- 나타나는 애니메이션 속도
+    fadeOutDuration = 0.1 -- 사라지는 애니메이션 속도
 }
 
 -- 속도 조절 함수
@@ -28,7 +30,8 @@ local function changeSpeed(delta)
     scrollSpeed = scrollSpeed + delta
     if scrollSpeed < 1 then scrollSpeed = 1 end
     if scrollSpeed > 30 then scrollSpeed = 30 end
-    hs.alert.show("자동 스크롤 속도: " .. scrollSpeed, alertStyle)
+    hs.alert.closeAll() -- 이전 메시지가 밀려있으면 즉시 삭제
+    hs.alert.show("자동 스크롤 속도: " .. scrollSpeed, alertStyle, nil, 0.6) -- 0.6초 후 바로 사라짐
 end
 
 -- 단축키: 속도 줄이기 (Cmd+Alt+Ctrl+Left)
