@@ -146,6 +146,8 @@ echo "백그라운드 서비스가 등록되었습니다."
 
 # LaunchAgent 적용 및 Hammerspoon 실행
 launchctl load ~/Library/LaunchAgents/org.hammerspoon.autostart.plist 2>/dev/null || true
+killall Hammerspoon 2>/dev/null || true
+sleep 0.5
 open -a Hammerspoon
 
 echo "==================================================="
