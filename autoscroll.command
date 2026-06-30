@@ -7,7 +7,7 @@ cat << 'INNER_EOF' >> ~/.hammerspoon/init.lua
 -- [Autoscroll Configuration]
 local scrollTimer = nil
 local scrollSpeed = 1
-local scrollInterval = 0.15 -- 기획 문서 읽기에 적합한 느리고 편안한 속도
+local scrollInterval = 0.20 -- 기획 문서 읽기에 적합한 느리고 편안한 속도
 local interruptTap = nil
 
 local function stopScroll()
