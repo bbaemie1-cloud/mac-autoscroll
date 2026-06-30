@@ -33,7 +33,7 @@ local function changeSpeed(delta)
     if scrollSpeed > 30 then scrollSpeed = 30 end
     
     hs.alert.closeAll(0.0) -- 이전 알림 즉시 삭제
-    hs.alert.show("자동 스크롤 속도: " .. scrollSpeed, alertStyle)
+    hs.alert.show("Autoscroll Speed: " .. scrollSpeed, alertStyle)
     
     -- 엔진 버그 우회: 강제로 0.4초 뒤에 알림 메시지를 삭제하는 타이머 생성
     if alertTimer then alertTimer:stop() end
