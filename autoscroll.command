@@ -97,9 +97,20 @@ interruptTap = hs.eventtap.new({
 end)
 
 -- 단축키: 최상단으로 순간이동 (Cmd+Alt+Ctrl+Up)
+local jumpTimer = nil
+local function executeJump()
+    local mods = hs.eventtap.checkKeyboardModifiers()
+    -- 사용자가 물리적인 수식 키(Cmd, Alt, Ctrl, Shift)를 모두 뗄 때까지 대기
+    if mods.cmd or mods.alt or mods.ctrl or mods.shift then
+        jumpTimer = hs.timer.doAfter(0.05, executeJump)
+    else
+        -- 모든 키에서 손을 뗐을 때 비로소 순수한 Cmd+Up 전송
+        hs.eventtap.keyStroke({"cmd"}, "up", 0)
+    end
+end
+
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "up", function()
     stopScroll()
-    hs.eventtap.keyStroke({"cmd"}, "up")
     
     hs.alert.closeAll(0.0)
     hs.alert.show("Jump to TOP!", alertStyle)
@@ -107,6 +118,10 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "up", function()
     alertTimer = hs.timer.doAfter(0.4, function()
         hs.alert.closeAll(0.1)
     end)
+    
+    -- 순간이동 실행 (사용자가 손을 떼는 시점을 추적)
+    if jumpTimer then jumpTimer:stop() end
+    executeJump()
 end)
 
 -- 단축키: 스크롤 시작/정지 (Cmd+Alt+Ctrl+Down)
