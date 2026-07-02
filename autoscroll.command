@@ -9,6 +9,13 @@ mkdir -p ~/.hammerspoon
 # 2. init.lua 파일 생성
 cat << 'EOF' > ~/.hammerspoon/init.lua
 -- [Autoscroll Configuration]
+
+-- 1. 가장 근본적인 원인 해결: '손쉬운 사용' 권한 자동 체크 및 권한 요청 팝업 띄우기
+if not hs.accessibilityState(false) then
+    hs.alert.show("⚠️ 필독: 시스템 설정에서 Hammerspoon의 '손쉬운 사용' 권한을 허용해주세요!", 5)
+    hs.accessibilityState(true) -- macOS 기본 권한 요청 창 띄우기
+end
+
 local scrollTimer = nil
 local scrollSpeed = 2 -- 기본 속도 (부드러운 스크롤 픽셀량)
 local scrollInterval = 0.01 -- 100 FPS 수준의 부드러운 갱신 주기
