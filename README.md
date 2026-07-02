@@ -24,11 +24,11 @@ An automated script that sets up smooth, hands-free autoscrolling on macOS using
 Whenever you change the speed, a brief on-screen alert will show the current speed level (1~30).
 
 ### 🆕 Recent Updates (v1.1)
-* **Jump to Top Shortcut**: Instantly teleport to the top of the page.
-* **100 FPS Ultra-Smooth Scrolling**: Increased the tick rate for buttery-smooth visual scrolling.
-* **Modern UI**: The alert message now features a sleek Midnight Blue & Mint color scheme and perfectly fades out after exactly 0.4 seconds.
-* **Intelligent Modifier Handling**: The "Jump to Top" feature smartly waits for you to release modifier keys before triggering, completely avoiding macOS key collisions.
-* **Auto-Accessibility Prompt**: A built-in security check now automatically prompts for Accessibility permissions on new installations.
+* **Jump to Top Shortcut**: Added a shortcut to move to the top of the page.
+* **Scroll Smoothness Improvement**: Increased the scroll update rate to 100 FPS.
+* **UI Update**: Changed the alert message color scheme to Midnight Blue & Mint and fixed the display duration to 0.4 seconds.
+* **Key Collision Fix**: The "Jump to Top" feature now waits for modifier keys to be released before triggering to prevent macOS key collisions.
+* **Accessibility Prompt**: Added an automatic prompt for Accessibility permissions during initial setup.
 
 ### 🚀 Installation
 
@@ -74,11 +74,11 @@ macOS 환경에서 Hammerspoon을 이용해 부드러운 자동 스크롤(Autosc
 속도를 변경하면 화면 정중앙에 투명한 팝업 알림창으로 현재 속도(1~30)를 알려줍니다.
 
 ### 🆕 최신 업데이트 (v1.1)
-* **최상단 순간이동 단축키 추가**: 단축키를 누르면 페이지 맨 위로 즉시 점프합니다.
-* **100 FPS 극강의 부드러움**: 스크롤 갱신 주기를 100프레임 수준으로 높여 훨씬 더 매끄러운 스크롤을 제공합니다.
-* **모던 UI 적용**: 알림창 디자인이 세련된 미드나잇 블루 & 민트 테마로 변경되었으며, 타이머 버그를 뚫고 0.4초 만에 깔끔하게 사라지도록 수정되었습니다.
-* **스마트 키 충돌 방지**: '최상단 이동' 기능 실행 시 물리적인 수식 키(Cmd, Alt, Ctrl)가 완전히 떼어질 때까지 아주 짧게 기다렸다가 신호를 발사하여 macOS 특유의 단축키 씹힘/충돌 현상을 완벽히 해결했습니다.
-* **자동 권한 요청 팝업**: 처음 설치하는 Mac 기기에서 '손쉬운 사용' 권한이 없을 경우, 스크립트가 이를 알아채고 경고창과 함께 애플 기본 권한 설정 팝업창을 알아서 띄워주도록 편의성을 대폭 개선했습니다.
+* **최상단 이동 단축키 추가**: 단축키를 누르면 페이지 맨 위로 이동합니다.
+* **스크롤 부드러움 개선**: 스크롤 갱신 주기를 100 FPS 수준으로 높였습니다.
+* **UI 디자인 변경**: 알림창 디자인을 미드나잇 블루 & 민트 테마로 변경하고, 표시 시간을 0.4초로 수정했습니다.
+* **키 충돌 현상 수정**: '최상단 이동' 단축키 입력 시 물리적인 수식 키(Cmd, Alt, Ctrl)에서 손을 뗀 후 신호가 발생하도록 변경하여 키 충돌 문제를 해결했습니다.
+* **권한 요청 팝업 추가**: 최초 실행 시 '손쉬운 사용' 권한이 없으면 시스템 권한 설정 팝업을 띄우도록 수정했습니다.
 
 ### 🚀 설치 방법
 
