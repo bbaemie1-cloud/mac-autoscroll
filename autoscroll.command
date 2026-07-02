@@ -85,7 +85,7 @@ interruptTap = hs.eventtap.new({
         local flags = ev:getFlags()
         local keyCode = ev:getKeyCode()
         if flags.cmd and flags.alt and flags.ctrl then
-            if keyCode == hs.keycodes.map["down"] or keyCode == hs.keycodes.map["left"] or keyCode == hs.keycodes.map["right"] then
+            if keyCode == hs.keycodes.map["down"] or keyCode == hs.keycodes.map["left"] or keyCode == hs.keycodes.map["right"] or keyCode == hs.keycodes.map["up"] then
                 return false
             end
         end
@@ -94,6 +94,19 @@ interruptTap = hs.eventtap.new({
     -- 그 외 사용자의 입력이 감지되면 스크롤 즉시 정지
     stopScroll()
     return false
+end)
+
+-- 단축키: 최상단으로 순간이동 (Cmd+Alt+Ctrl+Up)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "up", function()
+    stopScroll()
+    hs.eventtap.keyStroke({"cmd"}, "up")
+    
+    hs.alert.closeAll(0.0)
+    hs.alert.show("Jump to TOP!", alertStyle)
+    if alertTimer then alertTimer:stop() end
+    alertTimer = hs.timer.doAfter(0.4, function()
+        hs.alert.closeAll(0.1)
+    end)
 end)
 
 -- 단축키: 스크롤 시작/정지 (Cmd+Alt+Ctrl+Down)
